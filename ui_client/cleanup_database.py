@@ -82,11 +82,11 @@ def show_parts_by_prefix(parts):
         # Show samples
         print(f"  Samples:")
         for p in parts_list[:2]:
-            print(f"    • {p.get('external_id')}: {p.get('part_name', 'N/A')}")
+            print(f"    - {p.get('external_id')}: {p.get('part_name', 'N/A')}")
         if len(parts_list) > 4:
-            print(f"    • ...")
+            print(f"    ...")
         for p in parts_list[-2:]:
-            print(f"    • {p.get('external_id')}: {p.get('part_name', 'N/A')}")
+            print(f"    - {p.get('external_id')}: {p.get('part_name', 'N/A')}")
     
     return by_prefix
 
@@ -110,21 +110,21 @@ def filter_by_prefix(parts, prefix):
 
 def main():
     print("\n" + "=" * 80)
-    print("🗑️  SELECTIVE DATABASE CLEANUP TOOL")
+    print("SELECTIVE DATABASE CLEANUP TOOL")
     print("=" * 80)
     print("\nWARNING: Deletions are PERMANENT and IRREVERSIBLE!")
     print("Make sure you understand what you're deleting before confirming.\n")
     
     # Show configuration
-    print("📋 Configuration:")
+    print("Configuration:")
     print(f"  API URL: {API_URL}")
-    print(f"  API Key: {'✓ Loaded' if API_KEY else '✗ Not found (using Bearer)'}")
+    print(f"  API Key: {'Loaded' if API_KEY else 'Not found'}")
     print()
     
     # Fetch current data
     parts = get_all_parts()
     if not parts:
-        print("❌ No parts found in database or unable to connect")
+        print("No parts found in database or unable to connect")
         print(f"\nTroubleshooting:")
         print(f"  1. Check config.json for correct api_url and api_key")
         print(f"  2. Ensure backend API is running at {API_URL}")
@@ -151,22 +151,18 @@ def main():
     if choice == "1":
         prefix = input("Enter prefix (PS/STD/MD/etc.): ").strip().upper()
         if prefix not in by_prefix:
-            print(f"❌ Prefix '{prefix}' not found")
+            print(f"Prefix '{prefix}' not found")
             return
         
         try:
             start = int(input(f"Start number (e.g., 460): "))
             end = int(input(f"End number (e.g., 466): "))
         except ValueError:
-            print("❌ Invalid number")
-            return
-        
-        to_delete = filter_by_number_range(parts, prefix, start, end)
-        
+        print("Invalid number")
     elif choice == "2":
         prefix = input("Enter prefix to delete entirely (PS/STD/MD/etc.): ").strip().upper()
         if prefix not in by_prefix:
-            print(f"❌ Prefix '{prefix}' not found")
+            print(f"Prefix '{prefix}' not found")
             return
         
         to_delete = filter_by_prefix(parts, prefix)
@@ -176,7 +172,7 @@ def main():
         to_delete = [p for p in parts if p.get("external_id", "").upper() == ext_id]
         
         if not to_delete:
-            print(f"❌ External ID '{ext_id}' not found")
+            print(f"External ID '{ext_id}' not found")
             return
     
     elif choice == "4":
@@ -197,14 +193,14 @@ def main():
             to_delete = [p for p in parts if p.get("external_id", "").upper() == ext_id]
         
     elif choice == "5":
-        print("✓ Cancelled - no deletions made")
+        print("Cancelled - no deletions made")
         return
     else:
-        print("❌ Invalid option")
+        print("Invalid option")
         return
     
     if not to_delete:
-        print("❌ No parts matched your criteria")
+        print("No parts matched your criteria")
         return
     
     # Show what will be deleted
@@ -215,14 +211,14 @@ def main():
     for p in to_delete:
         ext_id = p.get("external_id", "")
         name = p.get("part_name", "N/A")
-        print(f"  • {ext_id}: {name}")
+        print(f"  - {ext_id}: {name}")
     
     # Final confirmation
-    print("\n⚠️  THIS CANNOT BE UNDONE!")
+    print("\nWARNING: THIS CANNOT BE UNDONE!")
     confirm = input(f"\nType 'DELETE' to confirm deletion of {len(to_delete)} part(s): ").strip()
     
     if confirm != "DELETE":
-        print("✓ Cancelled - no deletions made")
+        print("Cancelled - no deletions made")
         return
     
     # Perform deletion
@@ -236,14 +232,14 @@ def main():
     for p in to_delete:
         ext_id = p.get("external_id", "")
         if delete_part(ext_id):
-            print(f"✓ Deleted: {ext_id}")
+            print(f"Deleted: {ext_id}")
             deleted += 1
         else:
-            print(f"✗ Failed: {ext_id}")
+            print(f"Failed: {ext_id}")
             failed += 1
     
     print("\n" + "=" * 80)
-    print(f"✓ DELETION COMPLETE")
+    print(f"DELETION COMPLETE")
     print("=" * 80)
     print(f"  Deleted: {deleted} parts")
     print(f"  Failed: {failed} parts")
@@ -254,8 +250,8 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print("\n\n✓ Cancelled by user - no deletions made")
+        print("\n\nCancelled by user - no deletions made")
     except Exception as e:
-        print(f"\n❌ Unexpected error: {e}")
+        print(f"\nUnexpected error: {e}")
         import traceback
         traceback.print_exc()
