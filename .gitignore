@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment & Configuration (sensitive data)
+.env
+config.json
+
+# Local data & exports
+data/*.db
+data/*.sqlite
+*.csv
+
+# Logs
+*.log
+
+# Dependencies
+node_modules/

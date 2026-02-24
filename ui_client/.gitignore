@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Local data
+data/*.db
+data/*.sqlite
+
+# Configuration (contains sensitive API keys)
+config.json
+.env
+
+# Logs
+*.log
+
+# OS
+.DS_Store
