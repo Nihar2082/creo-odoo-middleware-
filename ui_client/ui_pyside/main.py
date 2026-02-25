@@ -25,7 +25,6 @@ from PySide6.QtWidgets import (
     QAbstractItemView,
 )
 
-from backend.db.schema import init_db
 from backend.db.repo import Repo
 from backend.parsers.ebom_parser import parse_ebom
 from backend.services.pipeline import process_file, compute_part_name
@@ -34,7 +33,6 @@ from backend.export.odoo_export import export_odoo_csv
 from matching_logic.core.normalize import normalize_name, canonical_key
 
 
-DB_PATH = "data/app.db"
 
 # --- Backend API configuration (FastAPI) ---
 def _config_base_dir() -> Path:
@@ -97,11 +95,8 @@ class App(QWidget):
         self.api_key = None
         self.api = requests.Session()
         self._ensure_backend_or_exit()
-
-        Path("data").mkdir(exist_ok=True)
-        init_db(DB_PATH)
         # Pass API URL and session to Repo so it uses PostgreSQL for matching
-        self.repo = Repo(DB_PATH, api_url=self.api_url, api_session=self.api)
+        self.repo = Repo(api_url=self.api_url, api_session=self.api)
 
         self.processed_rows = []  # List[ProcessedRow]
         self._last_ebom_rows = None  # raw EBOMRow list for refresh

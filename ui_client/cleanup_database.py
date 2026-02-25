@@ -158,7 +158,8 @@ def main():
             start = int(input(f"Start number (e.g., 460): "))
             end = int(input(f"End number (e.g., 466): "))
         except ValueError:
-        print("Invalid number")
+            print("Invalid number")
+            return
     elif choice == "2":
         prefix = input("Enter prefix to delete entirely (PS/STD/MD/etc.): ").strip().upper()
         if prefix not in by_prefix:

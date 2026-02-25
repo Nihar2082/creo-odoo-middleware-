@@ -25,14 +25,13 @@ def match_row(
     - Lower threshold (0.80 instead of 0.85) for better detection of similar parts.
 
     registry expects:
-      registry["aliases"]: dict[alias_key] -> external_id
+      registry["index"]: dict[key] -> external_id (exact hits)
       registry["parts"]: list of dict {external_id, name_norm, canonical_key, ...}
     """
     name_norm = normalize_name(name)
     ckey = canonical_key(name)
-
-    # 0) alias hit (includes both full name_norm and canonical_key)
-    ext = registry.get("aliases", {}).get(name_norm) or registry.get("aliases", {}).get(ckey)
+    # 0) exact index hit (normalized name or canonical key)
+    ext = registry.get("index", {}).get(name_norm) or registry.get("index", {}).get(ckey)
     if ext:
         return "EXISTING", ext, []
 

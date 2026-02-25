@@ -49,3 +49,16 @@ class IDCounter(Base):
 
     prefix = Column(String, primary_key=True)
     next_value = Column(Integer, nullable=False)
+
+
+class UiSetting(Base):
+    __tablename__ = "ui_settings"
+
+    module = Column(String, primary_key=True)
+    last_prefix = Column(String, nullable=True)
+
+
+class ItemCategory(Base):
+    __tablename__ = "item_categories"
+
+    name = Column(String, primary_key=True)
